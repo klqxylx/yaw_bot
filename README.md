@@ -135,6 +135,28 @@ Example:
 python .\scripts\rsl_rl\play.py --task Template-Yaw-Bot-Direct-v0 --checkpoint .\logs\rsl_rl\yaw_bot_direct\2026-03-18_17-19-18\model_700.pt
 ```
 
+Current playback behavior:
+
+- `play.py` forces a single environment
+- termination is disabled during playback
+- command resampling is disabled during playback
+- the viewer is intended for manual keyboard control
+
+Manual control keys in the simulation window:
+
+- `W`
+  Forward command
+- `S`
+  Backward command
+- `A`
+  Left yaw command
+- `D`
+  Right yaw command
+- `L`
+  Clear command to zero
+
+The terminal also prints the current commanded linear and yaw speed whenever the manual command changes.
+
 ## Utility Script: Compute Knee Angle
 
 The project includes a small helper for the current equivalent-leg mapping:
@@ -156,10 +178,24 @@ The current environment implementation includes:
 - IMU-style observation noise
 - Wheel encoder observations
 - Last-action feedback
+- Optional velocity-command observations for linear and yaw control
 - Optional rough terrain through `use_rough_terrain`
-- Random external body torque disturbances
+- Optional random external body force and torque disturbances
 - Non-wheel body contact termination through `ContactSensor`
 - A control path where PPO outputs branch hip `a`, mapped hip `b`, and wheel torques
+- Cylinder collision geometry for the wheels in the URDF
+
+The current observation layout in command-tracking mode is:
+
+- root quaternion: 4
+- root angular velocity: 3
+- projected gravity: 3
+- velocity commands: 2
+- wheel positions: 2
+- wheel velocities: 2
+- last actions: 6
+
+Total: `22`
 
 Some important config knobs live in:
 
@@ -182,13 +218,41 @@ At the moment:
 - Legs are controlled with `set_joint_position_target(...)`
 - Wheels are controlled with `set_joint_effort_target(...)`
 
+Current wheel collision is defined in the URDF with a cylinder collider using:
+
+- diameter `65 mm`
+- width `28 mm`
+
 ## Known Limitations
 
 - The task id still uses the template-style prefix `Template-`
 - Some older logs were written under the template experiment name `cartpole_direct`
 - The project still contains template/example files such as [ui_extension_example.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/ui_extension_example.py)
 - The equivalent knee torque mapping function is present but not yet wired into leg control
-- The external disturbance API in Isaac Lab currently emits a deprecation warning for `set_external_force_and_torque`
+- Older checkpoints may not resume if the observation dimension changes between runs
+- The current command-training workflow is still staged: this repository often trains stand / forward / yaw in separate phases rather than all at once
+
+## Training Diagnostics
+
+Recent versions of the environment log wheel- and command-related diagnostics into TensorBoard. Useful tags include:
+
+- `Diagnostics/root_lin_vel_x`
+- `Diagnostics/wheel_semantic_forward_vel`
+- `Diagnostics/wheel_effort_cmd_abs`
+- `Diagnostics/wheel_surface_speed`
+- `Diagnostics/wheel_body_speed_slip_abs`
+- `Diagnostics/lin_cmd_sign_match_rate`
+- `Diagnostics/forward_cmd_success_rate`
+- `Diagnostics/backward_cmd_success_rate`
+- `Diagnostics/servo_pose_error`
+- `Diagnostics/servo_joint_vel_sq`
+
+These are helpful when checking whether the robot is:
+
+- actually rolling the wheels
+- matching forward and backward commands with the correct sign
+- slipping at the wheel-ground contact
+- being over-constrained by the leg posture controller
 
 ## Quick Validation
 
