@@ -5,8 +5,8 @@ import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg
 from isaaclab.envs import DirectRLEnvCfg
 from isaaclab.scene import InteractiveSceneCfg
-from isaaclab.sim import SimulationCfg
 from isaaclab.sensors import ContactSensorCfg
+from isaaclab.sim import SimulationCfg
 from isaaclab.terrains import TerrainImporterCfg
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG
 from isaaclab.utils import configclass

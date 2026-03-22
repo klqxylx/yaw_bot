@@ -2,6 +2,8 @@
 
 `yaw_bot` is an Isaac Lab project for training, evaluating, and debugging a two-wheel balancing robot with leg joints.
 
+Language: [简体中文](./README_cn.md)
+
 The name `Yaw Bot` carries two meanings:
 
 - `YAW` refers to yaw-angle stability and heading control
@@ -14,6 +16,14 @@ The project currently focuses on:
 - equivalent leg-angle mapping for a simplified parallel-leg model
 - wheel-ground contact debugging
 - RSL-RL based training and playback
+
+## Acknowledgement / Upstream Reference
+
+This project is based on the open-source bipedal wheeled robot from StackForce:
+
+- https://gitee.com/StackForce/bipedal_wheeled_robot
+
+In this repository, we additionally use an inverse-solution mapping function to convert the parallel-leg structure into an equivalent joint representation for training and control in Isaac Lab.
 
 The registered task is:
 
@@ -31,23 +41,23 @@ Template-Yaw-Bot-Direct-v0
 
 ## Repository Layout
 
-- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
+- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
   Main direct RL environment
-- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
   Environment configuration, commands, rewards, observations, terrain and disturbance switches
-- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py)
+- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py)
   PPO runner configuration
-- [source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
+- [source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py](./source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
   Robot articulation and actuator definitions
-- [assets/robots/yaw_bot/yaw_bot.urdf](/d:/yaw/yaw_bot/assets/robots/yaw_bot/yaw_bot.urdf)
+- [assets/robots/yaw_bot/yaw_bot.urdf](./assets/robots/yaw_bot/yaw_bot.urdf)
   Robot URDF, including wheel collision geometry
-- [assets/robots/yaw_bot/config.yaml](/d:/yaw/yaw_bot/assets/robots/yaw_bot/config.yaml)
+- [assets/robots/yaw_bot/config.yaml](./assets/robots/yaw_bot/config.yaml)
   Asset conversion configuration
-- [scripts/rsl_rl/train.py](/d:/yaw/yaw_bot/scripts/rsl_rl/train.py)
+- [scripts/rsl_rl/train.py](./scripts/rsl_rl/train.py)
   Training entry point
-- [scripts/rsl_rl/play.py](/d:/yaw/yaw_bot/scripts/rsl_rl/play.py)
+- [scripts/rsl_rl/play.py](./scripts/rsl_rl/play.py)
   Playback entry point
-- [scripts/calc_knee_angle.py](/d:/yaw/yaw_bot/scripts/calc_knee_angle.py)
+- [scripts/calc_knee_angle.py](./scripts/calc_knee_angle.py)
   Helper for computing knee angle `t` from `a` and `b`
 
 ## Requirements
@@ -189,7 +199,7 @@ The terminal prints the current commanded linear and yaw speed whenever the manu
 
 The helper script:
 
-- [calc_knee_angle.py](/d:/yaw/yaw_bot/scripts/calc_knee_angle.py)
+- [calc_knee_angle.py](./scripts/calc_knee_angle.py)
 
 computes the knee angle `t` from branch hip angle `a` and mapped hip angle `b`.
 
@@ -239,7 +249,7 @@ Current implementation includes:
 
 The geometry conversion is implemented in:
 
-- [yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
+- [yaw_bot_env.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
 
 The knee torque mapping function exists as a placeholder interface, but torque-equivalent actuation is not yet fully wired into the leg control path.
 
@@ -265,7 +275,7 @@ Total:
 
 The observation configuration lives in:
 
-- [yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+- [yaw_bot_env_cfg.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
 
 ## Commands
 
@@ -304,11 +314,11 @@ The current reward structure includes:
 
 The main reward config is in:
 
-- [yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+- [yaw_bot_env_cfg.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
 
 The actual implementation is in:
 
-- [yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
+- [yaw_bot_env.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
 
 ## Actuators
 
@@ -325,7 +335,7 @@ Current control split:
 
 Current actuator config is in:
 
-- [yaw_bot_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
+- [yaw_bot_cfg.py](./source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
 
 ## Contact and Termination
 
@@ -353,7 +363,7 @@ The environment supports these optional features:
 
 These are all controlled in:
 
-- [yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+- [yaw_bot_env_cfg.py](./source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
 
 Typical workflow is staged:
 
@@ -373,7 +383,7 @@ Current wheel collision dimensions:
 
 This is defined in:
 
-- [yaw_bot.urdf](/d:/yaw/yaw_bot/assets/robots/yaw_bot/yaw_bot.urdf)
+- [yaw_bot.urdf](./assets/robots/yaw_bot/yaw_bot.urdf)
 
 This change was made to improve wheel-ground rolling behavior compared with mesh-based convex hull collision.
 
@@ -410,7 +420,7 @@ These are especially useful for checking:
 - yaw control is often trained later than forward/backward control, so not every checkpoint can turn
 - old checkpoints may not load if observation dimensions changed
 - the equivalent knee torque mapping is not yet part of the actual leg actuation path
-- the repository still contains some template/example files, such as [ui_extension_example.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/ui_extension_example.py)
+- the repository still contains some template/example files, such as [ui_extension_example.py](./source/yaw_bot/yaw_bot/ui_extension_example.py)
 
 ## Quick Validation
 
@@ -431,14 +441,14 @@ python -m py_compile .\source\yaw_bot\yaw_bot\robots\yaw_bot_cfg.py
 source/yaw_bot
 ```
 
-- root-level [setup.py](/d:/yaw/yaw_bot/setup.py) exists, but the actual Isaac Lab extension package is under:
+- root-level [setup.py](./setup.py) exists, but the actual Isaac Lab extension package is under:
 
 ```text
 source/yaw_bot
 ```
 
 - extension metadata lives in:
-  - [extension.toml](/d:/yaw/yaw_bot/source/yaw_bot/config/extension.toml)
+  - [extension.toml](./source/yaw_bot/config/extension.toml)
 
 ## License
 

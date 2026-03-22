@@ -3,8 +3,9 @@
 
 from __future__ import annotations
 
-import torch
 from collections.abc import Sequence
+
+import torch
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import Articulation
@@ -175,7 +176,9 @@ class YawBotEnv(DirectRLEnv):
 
         self._commands[env_ids, 0] = lin_cmd
         self._commands[env_ids, 1] = yaw_cmd
-        self._command_time_left[env_ids] = time_low + (time_high - time_low) * torch.rand(env_ids.numel(), device=self.device)
+        self._command_time_left[env_ids] = time_low + (time_high - time_low) * torch.rand(
+            env_ids.numel(), device=self.device
+        )
 
     def _sample_command_with_deadzone(
         self, num_samples: int, low: float, high: float, min_abs: float
@@ -257,8 +260,12 @@ class YawBotEnv(DirectRLEnv):
         lower = self._mapped_parallel_hip_lower_limits.clone()
         upper = self._mapped_parallel_hip_upper_limits.clone()
 
-        f_lower = self._compute_equivalent_knee_angle_from_branch_hips_rad(branch_hip_angles_rad, lower) - knee_angles_rad
-        f_upper = self._compute_equivalent_knee_angle_from_branch_hips_rad(branch_hip_angles_rad, upper) - knee_angles_rad
+        f_lower = (
+            self._compute_equivalent_knee_angle_from_branch_hips_rad(branch_hip_angles_rad, lower) - knee_angles_rad
+        )
+        f_upper = (
+            self._compute_equivalent_knee_angle_from_branch_hips_rad(branch_hip_angles_rad, upper) - knee_angles_rad
+        )
 
         has_bracket = f_lower * f_upper <= 0.0
         solution = branch_hip_angles_rad.clone()
@@ -269,7 +276,10 @@ class YawBotEnv(DirectRLEnv):
             flo = f_lower.clone()
             for _ in range(28):
                 mid = 0.5 * (lo + hi)
-                f_mid = self._compute_equivalent_knee_angle_from_branch_hips_rad(branch_hip_angles_rad, mid) - knee_angles_rad
+                f_mid = (
+                    self._compute_equivalent_knee_angle_from_branch_hips_rad(branch_hip_angles_rad, mid)
+                    - knee_angles_rad
+                )
                 choose_lower_half = flo * f_mid <= 0.0
                 hi = torch.where(choose_lower_half, mid, hi)
                 lo = torch.where(choose_lower_half, lo, mid)
@@ -496,7 +506,9 @@ class YawBotEnv(DirectRLEnv):
         rew_ang_vel = self.cfg.rew_scale_ang_vel * torch.sum(torch.square(root_ang_vel[:, :2]), dim=1)
         rew_vertical_vel = self.cfg.rew_scale_vertical_vel * torch.square(root_lin_vel[:, 2])
         rew_servo_joint_vel = self.cfg.rew_scale_servo_joint_vel * torch.sum(torch.square(servo_joint_vel), dim=1)
-        rew_action_rate = self.cfg.rew_scale_action_rate * torch.sum(torch.square(self.actions - self.last_actions), dim=1)
+        rew_action_rate = self.cfg.rew_scale_action_rate * torch.sum(
+            torch.square(self.actions - self.last_actions), dim=1
+        )
         if self.cfg.use_velocity_commands:
             lin_vel_error = torch.square(root_lin_vel[:, 0] - self._commands[:, 0])
             yaw_vel_error = torch.square(root_ang_vel[:, 2] - self._commands[:, 1])
