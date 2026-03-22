@@ -16,11 +16,10 @@ simulation_app = app_launcher.app
 # imports
 # -----------------------------------------------------------------------------
 import isaaclab.sim as sim_utils
-from isaaclab.assets import Articulation, ArticulationCfg
 from isaaclab.actuators import ImplicitActuatorCfg
+from isaaclab.assets import Articulation, ArticulationCfg
 from isaaclab.sim import SimulationCfg, SimulationContext
 from isaaclab.sim.spawners.from_files import GroundPlaneCfg, spawn_ground_plane
-
 
 # -----------------------------------------------------------------------------
 # robot cfg
