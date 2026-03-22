@@ -2,6 +2,8 @@
 
 `yaw_bot` is an Isaac Lab project for training, evaluating, and debugging a two-wheel balancing robot with leg joints.
 
+Language: [简体中文](./README_cn.md)
+
 The name `Yaw Bot` carries two meanings:
 
 - `YAW` refers to yaw-angle stability and heading control
@@ -14,6 +16,14 @@ The project currently focuses on:
 - equivalent leg-angle mapping for a simplified parallel-leg model
 - wheel-ground contact debugging
 - RSL-RL based training and playback
+
+## Acknowledgement / Upstream Reference
+
+This project is based on the open-source bipedal wheeled robot from StackForce:
+
+- https://gitee.com/StackForce/bipedal_wheeled_robot
+
+In this repository, we additionally use an inverse-solution mapping function to convert the parallel-leg structure into an equivalent joint representation for training and control in Isaac Lab.
 
 The registered task is:
 
