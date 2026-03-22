@@ -1,7 +1,6 @@
-from isaaclab.assets import ArticulationCfg
 from isaaclab.actuators import ImplicitActuatorCfg
+from isaaclab.assets import ArticulationCfg
 from isaaclab.sim import UsdFileCfg
-
 
 YAW_BOT_CFG = ArticulationCfg(
     prim_path="{ENV_REGEX_NS}/Robot",

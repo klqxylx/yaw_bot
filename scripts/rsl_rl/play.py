@@ -67,6 +67,7 @@ import time
 import gymnasium as gym
 import numpy as np
 import torch
+import yaw_bot.tasks  # noqa: F401
 from rsl_rl.runners import DistillationRunner, OnPolicyRunner
 
 from isaaclab.devices import Se2Keyboard, Se2KeyboardCfg
@@ -92,8 +93,6 @@ from isaaclab_rl.utils.pretrained_checkpoint import get_published_pretrained_che
 import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
-
-import yaw_bot.tasks  # noqa: F401
 
 
 class WsAdSe2Keyboard(Se2Keyboard):
