@@ -1,93 +1,112 @@
 # Yaw Bot
 
-`yaw_bot` is an Isaac Lab project for training and evaluating a two-wheel balancing robot with leg joints.
+`yaw_bot` is an Isaac Lab project for training, evaluating, and debugging a two-wheel balancing robot with leg joints.
 
-The repository currently contains:
+The project currently focuses on:
 
-- A direct RL task registered as `Template-Yaw-Bot-Direct-v0`
-- An RSL-RL training and playback pipeline
-- A simplified robot model under `assets/robots/yaw_bot`
-- A leg-angle mapping utility for the equivalent parallel-leg geometry
+- balancing and standing
+- forward/backward command tracking
+- equivalent leg-angle mapping for a simplified parallel-leg model
+- wheel-ground contact debugging
+- RSL-RL based training and playback
 
-## Project Layout
-
-- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
-  Direct RL environment implementation
-- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
-  Environment configuration, rewards, observations, terrain switch, disturbance settings
-- [source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
-  Robot articulation and actuator configuration
-- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py)
-  PPO runner configuration
-- [scripts/rsl_rl/train.py](/d:/yaw/yaw_bot/scripts/rsl_rl/train.py)
-  Training entry point
-- [scripts/rsl_rl/play.py](/d:/yaw/yaw_bot/scripts/rsl_rl/play.py)
-  Checkpoint playback entry point
-- [scripts/calc_knee_angle.py](/d:/yaw/yaw_bot/scripts/calc_knee_angle.py)
-  Small CLI utility for computing knee angle `t` from `a` and `b`
-
-## Requirements
-
-- Isaac Lab installed and working
-- A Python environment that can import `isaaclab`, `isaaclab_tasks`, `isaaclab_rl`, and `rsl-rl-lib`
-- Windows or Linux
-
-This project is designed to be installed outside the main Isaac Lab repository, then imported by Isaac Lab.
-
-## Installation
-
-1. Install Isaac Lab first.
-
-2. From the repository root, install the package in editable mode:
-
-```bash
-python -m pip install -e source/yaw_bot
-```
-
-If your Isaac Lab environment is launched through the provided shell wrapper, use that instead of plain `python`.
-
-On Windows, a common pattern is:
-
-```powershell
-.\isaaclab.bat -p -m pip install -e source\yaw_bot
-```
-
-## Registered Task
-
-The project currently registers one gym task:
+The registered task is:
 
 ```text
 Template-Yaw-Bot-Direct-v0
 ```
 
-You can verify registration with:
+## What This Repository Contains
+
+- a direct RL task implementation for Isaac Lab
+- a robot asset and articulation config for the yaw bot
+- PPO configs for RSL-RL
+- training and playback scripts
+- a small utility script for checking the current knee-angle mapping
+
+## Repository Layout
+
+- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
+  Main direct RL environment
+- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+  Environment configuration, commands, rewards, observations, terrain and disturbance switches
+- [source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/agents/rsl_rl_ppo_cfg.py)
+  PPO runner configuration
+- [source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
+  Robot articulation and actuator definitions
+- [assets/robots/yaw_bot/yaw_bot.urdf](/d:/yaw/yaw_bot/assets/robots/yaw_bot/yaw_bot.urdf)
+  Robot URDF, including wheel collision geometry
+- [assets/robots/yaw_bot/config.yaml](/d:/yaw/yaw_bot/assets/robots/yaw_bot/config.yaml)
+  Asset conversion configuration
+- [scripts/rsl_rl/train.py](/d:/yaw/yaw_bot/scripts/rsl_rl/train.py)
+  Training entry point
+- [scripts/rsl_rl/play.py](/d:/yaw/yaw_bot/scripts/rsl_rl/play.py)
+  Playback entry point
+- [scripts/calc_knee_angle.py](/d:/yaw/yaw_bot/scripts/calc_knee_angle.py)
+  Helper for computing knee angle `t` from `a` and `b`
+
+## Requirements
+
+- Isaac Lab installed and working
+- a Python environment that can import:
+  - `isaaclab`
+  - `isaaclab_tasks`
+  - `isaaclab_rl`
+  - `rsl_rl`
+- Windows or Linux
+
+This repository is intended to live outside the main Isaac Lab repository and be installed as an editable package.
+
+## Installation
+
+Install the extension package from the repository root:
+
+```powershell
+python -m pip install -e source/yaw_bot
+```
+
+If you normally launch inside the Isaac Lab wrapper, use:
+
+```powershell
+.\isaaclab.bat -p -m pip install -e source\yaw_bot
+```
+
+## Verify Task Registration
+
+You can list registered environments with:
 
 ```powershell
 python .\scripts\list_envs.py
 ```
 
+Look for:
+
+```text
+Template-Yaw-Bot-Direct-v0
+```
+
 ## Training
 
-Train with:
+Basic training command:
 
 ```powershell
 python .\scripts\rsl_rl\train.py --task Template-Yaw-Bot-Direct-v0
 ```
 
-Typical Windows Isaac Lab launch form:
+Typical Isaac Lab launch form on Windows:
 
 ```powershell
 .\isaaclab.bat -p .\scripts\rsl_rl\train.py --task Template-Yaw-Bot-Direct-v0
 ```
 
-Useful options:
+Useful overrides:
 
 - `--num_envs <N>`
 - `--max_iterations <N>`
 - `--seed <N>`
 - `--video`
 
-The current PPO experiment name is `yaw_bot_direct`, so new training logs are written under:
+Training logs are written under:
 
 ```text
 logs/rsl_rl/yaw_bot_direct/<timestamp>/
@@ -99,7 +118,7 @@ Each run directory typically contains:
 - `events.out.tfevents.*`
 - `params/env.yaml`
 - `params/agent.yaml`
-- `exported/` after playback export
+- `exported/`
 
 ## Resume Training
 
@@ -112,10 +131,14 @@ python .\scripts\rsl_rl\train.py --task Template-Yaw-Bot-Direct-v0 --resume --lo
 Example:
 
 ```powershell
-python .\scripts\rsl_rl\train.py --task Template-Yaw-Bot-Direct-v0 --resume --load_run 2026-03-18_13-26-33 --checkpoint model_999.pt
+python .\scripts\rsl_rl\train.py --task Template-Yaw-Bot-Direct-v0 --resume --load_run 2026-03-22_20-04-04 --checkpoint model_999.pt
 ```
 
-If the run was produced before the experiment name was renamed from the template default, its path may still be under:
+Notes:
+
+- resuming creates a new run directory rather than overwriting the old one
+- old checkpoints may fail to resume if the observation dimension changed
+- some older runs may still live under:
 
 ```text
 logs/rsl_rl/cartpole_direct/
@@ -123,43 +146,49 @@ logs/rsl_rl/cartpole_direct/
 
 ## Play a Trained Policy
 
-Run a saved checkpoint with:
+Playback command:
 
 ```powershell
-python .\scripts\rsl_rl\play.py --task Template-Yaw-Bot-Direct-v0 --checkpoint <absolute_or_relative_path_to_model>
+python .\scripts\rsl_rl\play.py --task Template-Yaw-Bot-Direct-v0 --checkpoint <checkpoint_path>
 ```
 
 Example:
 
 ```powershell
-python .\scripts\rsl_rl\play.py --task Template-Yaw-Bot-Direct-v0 --checkpoint .\logs\rsl_rl\yaw_bot_direct\2026-03-18_17-19-18\model_700.pt
+python .\scripts\rsl_rl\play.py --task Template-Yaw-Bot-Direct-v0 --checkpoint .\logs\rsl_rl\yaw_bot_direct\2026-03-22_20-04-04\model_999.pt
 ```
 
 Current playback behavior:
 
-- `play.py` forces a single environment
+- playback forces a single environment
 - termination is disabled during playback
 - command resampling is disabled during playback
-- the viewer is intended for manual keyboard control
+- playback is designed for manual keyboard command input
 
 Manual control keys in the simulation window:
 
 - `W`
-  Forward command
+  forward command
 - `S`
-  Backward command
+  backward command
 - `A`
-  Left yaw command
+  left yaw command
 - `D`
-  Right yaw command
+  right yaw command
 - `L`
-  Clear command to zero
+  clear command
 
-The terminal also prints the current commanded linear and yaw speed whenever the manual command changes.
+The terminal prints the current commanded linear and yaw speed whenever the manual command changes.
 
-## Utility Script: Compute Knee Angle
+## Utility Script
 
-The project includes a small helper for the current equivalent-leg mapping:
+The helper script:
+
+- [calc_knee_angle.py](/d:/yaw/yaw_bot/scripts/calc_knee_angle.py)
+
+computes the knee angle `t` from branch hip angle `a` and mapped hip angle `b`.
+
+Example:
 
 ```powershell
 python .\scripts\calc_knee_angle.py 10 20
@@ -167,25 +196,53 @@ python .\scripts\calc_knee_angle.py 10 20
 
 This prints:
 
-- branch hip angle `a` in degrees
-- mapped hip angle `b` in degrees
-- computed knee angle `t` in degrees
+- `a` in degrees
+- `b` in degrees
+- `t` in degrees
 
-## Current Environment Notes
+## Robot and Control Overview
 
-The current environment implementation includes:
+The current policy outputs 6 actions:
 
-- IMU-style observation noise
-- Wheel encoder observations
-- Last-action feedback
-- Optional velocity-command observations for linear and yaw control
-- Optional rough terrain through `use_rough_terrain`
-- Optional random external body force and torque disturbances
-- Non-wheel body contact termination through `ContactSensor`
-- A control path where PPO outputs branch hip `a`, mapped hip `b`, and wheel torques
-- Cylinder collision geometry for the wheels in the URDF
+1. left branch hip `a`
+2. left mapped hip `b`
+3. right branch hip `a`
+4. right mapped hip `b`
+5. left wheel torque command
+6. right wheel torque command
 
-The current observation layout in command-tracking mode is:
+Leg control:
+
+- the policy outputs `a` and `b`
+- the environment computes the semantic knee angle `t = f(a, b)`
+- the simulated servo targets become `[left_hip, left_knee, right_hip, right_knee]`
+
+Wheel control:
+
+- wheels are controlled with `set_joint_effort_target(...)`
+- wheel sign conventions are unified in the environment so semantic forward wheel motion is consistent across left and right wheels
+
+## Equivalent Leg Mapping
+
+The real mechanism is treated as an equivalent simplified structure in simulation.
+
+Current implementation includes:
+
+- branch hip angle `a`
+- mapped hip angle `b`
+- derived knee angle `t`
+
+The geometry conversion is implemented in:
+
+- [yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
+
+The knee torque mapping function exists as a placeholder interface, but torque-equivalent actuation is not yet fully wired into the leg control path.
+
+## Observations
+
+Current command-tracking observation size is `22`.
+
+The layout is:
 
 - root quaternion: 4
 - root angular velocity: 3
@@ -195,46 +252,131 @@ The current observation layout in command-tracking mode is:
 - wheel velocities: 2
 - last actions: 6
 
-Total: `22`
+Total:
 
-Some important config knobs live in:
+```text
+22
+```
+
+The observation configuration lives in:
 
 - [yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
-- [yaw_bot_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
+
+## Commands
+
+The environment supports command-tracking mode through:
+
+- `use_velocity_commands`
+
+The current command set is:
+
+- linear x velocity command
+- yaw angular velocity command
+
+These commands are sampled inside the environment during training and written manually during playback.
+
+Relevant config fields:
+
+- `command_lin_vel_x_range`
+- `command_yaw_vel_range`
+- `command_resample_time_range`
+- `command_lin_vel_x_min_abs`
+- `command_yaw_vel_min_abs`
+- `command_yaw_probability`
+
+## Rewards
+
+The current reward structure includes:
+
+- alive reward
+- termination penalty
+- body angle penalty
+- angular-velocity penalties
+- vertical-velocity penalty
+- optional leg pose and symmetry regularization
+- linear command-tracking reward
+- wheel-based linear command-tracking reward
+
+The main reward config is in:
+
+- [yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+
+The actual implementation is in:
+
+- [yaw_bot_env.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env.py)
 
 ## Actuators
 
-The robot currently uses three actuator groups:
+The robot uses three actuator groups:
 
 - `hip_joints`
-  Left and right branch hip joints
 - `knee_joints`
-  Left and right simplified knee joints
 - `wheel_joints`
-  Left and right wheels
 
-At the moment:
+Current control split:
 
-- Legs are controlled with `set_joint_position_target(...)`
-- Wheels are controlled with `set_joint_effort_target(...)`
+- hips and knees use position targets
+- wheels use effort targets
 
-Current wheel collision is defined in the URDF with a cylinder collider using:
+Current actuator config is in:
+
+- [yaw_bot_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/robots/yaw_bot_cfg.py)
+
+## Contact and Termination
+
+Termination is based on non-wheel body contact through a `ContactSensor`.
+
+Tracked links for termination include:
+
+- `Body`
+- `L_leg1`
+- `L_leg2`
+- `R_leg1`
+- `R_leg2`
+
+Wheel contact is allowed.
+
+## Terrain and Disturbances
+
+The environment supports these optional features:
+
+- flat terrain
+- rough terrain
+- IMU noise
+- random body force pulses
+- random body torque pulses
+
+These are all controlled in:
+
+- [yaw_bot_env_cfg.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/tasks/direct/yaw_bot/yaw_bot_env_cfg.py)
+
+Typical workflow is staged:
+
+1. train standing or straight-line motion on flat terrain
+2. add forward/backward command tracking
+3. add yaw control
+4. add disturbances and rough terrain
+
+## Wheel Geometry and Contact
+
+The wheel collision geometry in the URDF is currently a cylinder, not a mesh collider.
+
+Current wheel collision dimensions:
 
 - diameter `65 mm`
 - width `28 mm`
 
-## Known Limitations
+This is defined in:
 
-- The task id still uses the template-style prefix `Template-`
-- Some older logs were written under the template experiment name `cartpole_direct`
-- The project still contains template/example files such as [ui_extension_example.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/ui_extension_example.py)
-- The equivalent knee torque mapping function is present but not yet wired into leg control
-- Older checkpoints may not resume if the observation dimension changes between runs
-- The current command-training workflow is still staged: this repository often trains stand / forward / yaw in separate phases rather than all at once
+- [yaw_bot.urdf](/d:/yaw/yaw_bot/assets/robots/yaw_bot/yaw_bot.urdf)
+
+This change was made to improve wheel-ground rolling behavior compared with mesh-based convex hull collision.
 
 ## Training Diagnostics
 
-Recent versions of the environment log wheel- and command-related diagnostics into TensorBoard. Useful tags include:
+Recent versions of the environment log wheel- and command-related diagnostics to TensorBoard.
+
+Useful tags include:
 
 - `Diagnostics/root_lin_vel_x`
 - `Diagnostics/wheel_semantic_forward_vel`
@@ -246,17 +388,28 @@ Recent versions of the environment log wheel- and command-related diagnostics in
 - `Diagnostics/backward_cmd_success_rate`
 - `Diagnostics/servo_pose_error`
 - `Diagnostics/servo_joint_vel_sq`
+- `Diagnostics/gravity_xy_error`
+- `Diagnostics/root_vertical_vel_abs`
 
-These are helpful when checking whether the robot is:
+These are especially useful for checking:
 
-- actually rolling the wheels
-- matching forward and backward commands with the correct sign
-- slipping at the wheel-ground contact
-- being over-constrained by the leg posture controller
+- whether the wheels are actually being driven
+- whether forward and backward commands are learned with the correct sign
+- whether wheel-ground slip is dominating
+- whether the leg controller is over-constraining propulsion
+
+## Current Known Limitations
+
+- the gym task name still uses the template-style prefix `Template-`
+- some older logs remain under the old template experiment name `cartpole_direct`
+- yaw control is often trained later than forward/backward control, so not every checkpoint can turn
+- old checkpoints may not load if observation dimensions changed
+- the equivalent knee torque mapping is not yet part of the actual leg actuation path
+- the repository still contains some template/example files, such as [ui_extension_example.py](/d:/yaw/yaw_bot/source/yaw_bot/yaw_bot/ui_extension_example.py)
 
 ## Quick Validation
 
-Lightweight checks that are safe to run from the repository root:
+Useful lightweight checks from the repository root:
 
 ```powershell
 python .\scripts\calc_knee_angle.py 10 20
@@ -267,14 +420,21 @@ python -m py_compile .\source\yaw_bot\yaw_bot\robots\yaw_bot_cfg.py
 
 ## Development Notes
 
-- Root-level [setup.py](/d:/yaw/yaw_bot/setup.py) exists, but the intended editable install path for the Isaac Lab extension package is still:
+- the intended editable install package is:
 
 ```text
 source/yaw_bot
 ```
 
-- The extension metadata lives in [extension.toml](/d:/yaw/yaw_bot/source/yaw_bot/config/extension.toml)
+- root-level [setup.py](/d:/yaw/yaw_bot/setup.py) exists, but the actual Isaac Lab extension package is under:
+
+```text
+source/yaw_bot
+```
+
+- extension metadata lives in:
+  - [extension.toml](/d:/yaw/yaw_bot/source/yaw_bot/config/extension.toml)
 
 ## License
 
-This repository contains code derived from the Isaac Lab project template and keeps the original upstream headers in many files.
+This repository contains code derived from the Isaac Lab project template and retains the original upstream headers in many files.
